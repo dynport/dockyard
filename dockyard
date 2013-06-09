@@ -2,11 +2,11 @@
 set -e
 
 function info {
-  echo $@
+  echo "[$log_prefix] $@"
 }
 
 function error {
-  echo $@ > /dev/stderr
+  echo "[$log_prefix] $@" > /dev/stderr
 }
 
 function enable_universe {
@@ -166,6 +166,7 @@ case $1 in
     enable_universe
     ;;
   "install")
+    log_prefix="$2:$3"
     do_install $2 $3
     ;;
   *)
