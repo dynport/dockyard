@@ -135,7 +135,79 @@ function install_ruby {
     cd /tmp/$name
     info "configuring"
     ./configure --disable-install-doc
-    info "compiling $name"
+    info "compiling"
+    make
+    info "installing"
+    make install
+  else
+    info "already installed"
+  fi
+}
+
+function install_postgresql {
+  info "installing postgresql $version"
+  url=http://ftp.postgresql.org/pub/source/v$version/postgresql-$version.tar.gz
+  download_url $url
+
+  apt-get install -y libxslt1-dev libxml2-dev python-dev libreadline-dev bison flex
+
+  file_name=$(basename $dst)
+  name=$(echo $file_name | sed 's/\.tar\.gz//')
+
+  if [ ! -e /tmp/$file_name.extracted ]; then
+    info "extracting"
+    cd /tmp
+    tar xfz $file_name && touch $file_name.extracted
+  else
+    info "already extracted"
+  fi
+
+  marker=/tmp/$name.configured
+
+  if [ ! -e $marker ]; then
+    info "configuring"
+    cd /tmp/$name
+    ./configure --with-libxml --with-python --with-libxslt --with-openssl
+    touch $marker
+  else
+    info "already configured"
+  fi
+
+  marker=/usr/local/pgsql/bin/postgres
+
+  if [ ! -e $marker ]; then
+    cd /tmp/$name
+    info "building"
+    make
+    info "installing"
+    make install
+  else
+    info "already installed"
+  fi
+}
+
+function install_redis {
+  info "installing"
+  url=http://redis.googlecode.com/files/redis-$version.tar.gz
+  file_name=$(basename $url)
+  name=$(echo $file_name | sed 's/\.tar\.gz//')
+  download_url $url
+
+  marker=/tmp/$file_name.extracted$
+
+  if [ ! -e $marker ]; then
+    info "extracting"
+    cd /tmp
+    tar xfz $file_name
+    touch $marker
+  else
+    info "already extracted"
+  fi
+
+  marker=/usr/local/bin/redis-server
+  if [ ! -e $marker ]; then
+    cd /tmp/$name
+    info "building"
     make
     info "installing"
     make install
@@ -154,6 +226,12 @@ function do_install {
       ;;
     "nginx")
     install_nginx $version
+      ;;
+    "postgresql")
+    install_postgresql $version
+      ;;
+    "redis")
+    install_redis $version
       ;;
   esac
 }
