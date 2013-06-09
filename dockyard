@@ -40,6 +40,7 @@ function download_url {
 }
 
 function configure {
+  assign_variables
   marker=/tmp/$name.configured
   if [ ! -e $marker ]; then
     cd /tmp/$name
@@ -57,6 +58,7 @@ function configure {
 }
 
 function build {
+  assign_variables
   marker=/tmp/$name.built
   if [ ! -e $marker ]; then
     cd /tmp/$name
@@ -69,6 +71,7 @@ function build {
 }
 
 function install_binaries {
+  assign_variables
   marker=/tmp/$name.installed
   if [ ! -e $marker ]; then
     cd /tmp/$name
@@ -81,11 +84,16 @@ function install_binaries {
 }
 
 function assign_variables {
+  if [ "$url" == "" ]; then
+    error "url must be set"
+    exit 1
+  fi
   file_name=$(basename $url)
   name=$(echo $file_name | sed 's/\.tar\.gz//')
 }
 
 function extract {
+  assign_variables
   marker=/tmp/$file_name.extracted$
   if [ ! -e $marker ]; then
     info "extracting"
@@ -102,11 +110,16 @@ function setup {
   enable_universe
   info "install build packages"
   apt-get install build-essential curl git-core -y
+  info "installed build packages"
 }
 
 function install_required_packages {
   if [ "$required_packages" != "" ]; then
+    info "installing required packages"
     apt-get install -y $required_packages
+    info "installed required packages"
+  else
+    info "no packages to install"
   fi
 }
 
@@ -117,7 +130,6 @@ function install_postgresql {
 
   download_url $url
   install_required_packages
-  assign_variables
   extract
   configure
   build
@@ -153,7 +165,6 @@ function install_nginx {
   configure_cmd="./configure --with-http_ssl_module --with-http_spdy_module --with-http_gzip_static_module --with-http_stub_status_module --add-module=/tmp/nginx_syslog_patch"
   download_url $url
   install_required_packages
-  assign_variables
   extract
   apply_nginx_syslog_patch
   configure
@@ -177,7 +188,6 @@ function install_ruby {
 
 function install_redis {
   url=http://redis.googlecode.com/files/redis-$version.tar.gz
-  assign_variables
   download_url $url
   extract
   build
@@ -187,7 +197,6 @@ function install_redis {
 function install_memcached {
   url="http://memcached.googlecode.com/files/memcached-$version.tar.gz"
   required_packages="libevent-dev"
-  assign_variables
   download_url $url
   install_required_packages
   extract
@@ -217,6 +226,8 @@ function do_install {
     "redis")
     install_redis $version
       ;;
+    "*")
+    log "recipe $name unknwon"
   esac
 }
 
