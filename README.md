@@ -27,7 +27,9 @@ Dockyard is
 ## Dockerfile example
 
     FROM ubuntu:12.04
-    ENV BUILT_ON 2013-06-09 # changing this field can be used to force a re-download of the dockyard script
+
+    # changing this field can be used to force a re-download of the dockyard script
+    ENV BUILT_ON 2013-06-09 
 
     RUN apt-get update && apt-get install curl -y
     RUN curl https://raw.github.com/dynport/dockyard/master/dockyard -o /usr/local/bin/dockyard && chmod 0755 /usr/local/bin/dockyard
