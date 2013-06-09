@@ -25,7 +25,7 @@ Dockyard is
     dockyard install redis 2.6.13
 
 ## Dockerfile example
-
+    # /tmp/redis.dockerfile
     FROM ubuntu:12.04
 
     # changing this field can be used to force a re-download of the dockyard script
@@ -41,9 +41,13 @@ Dockyard is
 
     CMD redis-server
 
+And then execute with:
+
+    cat /tmp/redis.dockerfile | docker build -t dockyard:redis-2.6.13 -
+
 ## Available recipes (with most recent versions)
 
-    ruby      # 2.0.0-p195
+    ruby        # 2.0.0-p195
     nginx       # 1.4.1
     redis       # 2.6.13
     postgresql  # 9.2.4
