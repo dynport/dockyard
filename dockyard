@@ -62,7 +62,7 @@ function install_nginx {
   if [ ! -e /tmp/$file_name.extracted ]; then
     info "extracting $name"
     cd /tmp
-    tar xvfz $file_name && touch $file_name.extracted
+    tar xfz $file_name && touch $file_name.extracted
   else
     info "already extracted"
   fi
@@ -126,7 +126,7 @@ function install_ruby {
   if [ ! -e /tmp/$file_name.extracted ]; then
     info "extracting"
     cd /tmp
-    tar xvfz $file_name && touch $file_name.extracted
+    tar xfz $file_name && touch $file_name.extracted
   else
     info "already extracted"
   fi
