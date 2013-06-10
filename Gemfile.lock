@@ -1,0 +1,23 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    anywhere (0.0.1)
+      colorize
+      net-ssh
+      pry
+    coderay (1.0.9)
+    colorize (0.5.8)
+    method_source (0.8.1)
+    net-ssh (2.6.7)
+    pry (0.9.12.2)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.4)
+    slop (3.4.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  anywhere
+  colorize

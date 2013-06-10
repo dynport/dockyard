@@ -1,0 +1,87 @@
+#!/usr/bin/env ruby
+require "anywhere/ssh"
+require "colorize"
+require "time"
+require "optparse"
+
+host = nil
+user = "root"
+ssh_key_path = File.expand_path("~/.ssh/id_rsa.pub")
+
+opts = OptionParser.new do |o|
+  o.on("-h HOST", "--host", "Remote docker host to be used") do |value|
+    host = value
+  end
+
+  o.on("-u USER", "--user", "Remote user to access docker host. default: #{user}") do |value|
+    user = value
+  end
+
+  o.on("-i SSH_KEY", "--ssh-key", "Path to your public ssh key. default: #{ssh_key_path}") do |value|
+    ssh_key_path = File.expand_path(value)
+  end
+end
+
+cmd = opts.parse(ARGV)
+
+if host.nil?
+  puts "ERROR: host must be provided"
+  abort opts.to_s
+end
+
+if cmd.empty?
+  puts "ERROR: you must provide some command. Example: #{__FILE__} redis 2.6.13"
+  abort opts.to_s
+end
+
+root_runner = Anywhere::SSH.new(host, user)
+
+image_name = "dockyard:sshd"
+
+begin
+  root_runner.execute("docker inspect #{image_name}")
+rescue RuntimeError => err
+  if !File.exists?(ssh_key_path)
+    puts "ERROR: no ssh key found at #{ssh_key_path}"
+    abort opts.to_s
+  end
+  ssh_key = File.read(ssh_key_path).strip
+
+  ssh_build =<<-EOF
+    FROM ubuntu:12.04
+
+    RUN apt-get update -y
+    RUN apt-get install openssh-server -y
+    RUN mkdir -p /var/run/sshd
+
+    RUN mkdir /root/.ssh/
+    RUN echo "#{ssh_key}" > /root/.ssh/authorized_keys
+
+    EXPOSE 22
+
+    CMD /usr/sbin/sshd -D
+  EOF
+  ssh_build.gsub!(/^\s+/, "")
+
+  dockerfile_path = "/tmp/sshd/Dockerfile"
+  root_runner.write_file(dockerfile_path, ssh_build)
+
+  puts root_runner.execute("docker build -t #{image_name} -", ssh_build).stdout
+end
+
+instance_id = root_runner.execute("docker run -d #{image_name}").stdout.strip
+
+begin
+  port = root_runner.execute("docker port #{instance_id} 22").stdout.strip.to_i
+  atts = { instance_id: instance_id, port: port }
+  puts "running #{atts.inspect}"
+
+  runner = Anywhere::SSH.new(host, user, port: port)
+  runner.execute("apt-get update && apt-get install curl -y")
+  runner.write_file("/usr/bin/dockyard", File.read(File.expand_path("../../dockyard", __FILE__)), mode: "0755")
+  runner.execute("/usr/bin/dockyard install #{cmd.join(" ")}")
+  puts "installed in container #{atts.inspect}"
+ensure
+  root_runner.execute("docker kill #{instance_id}")
+end
+
