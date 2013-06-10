@@ -205,12 +205,25 @@ function install_memcached {
   install_binaries
 }
 
+function install_jruby { 
+  url="http://jruby.org.s3.amazonaws.com/downloads/$version/jruby-bin-$version.tar.gz"
+  required_packages=openjdk-6-jre-headless
+  download_url $url
+  install_required_packages
+  extract
+  info "installing jruby"
+  cp /tmp/jruby-$version/bin/* /usr/local/bin/
+}
+
 function do_install {
   name=$1
   version=$2
   setup
 
   case $name in
+    "jruby")
+      install_jruby
+      ;;
     "ruby")
     install_ruby $version
       ;;
@@ -227,7 +240,8 @@ function do_install {
     install_redis $version
       ;;
     "*")
-    log "recipe $name unknwon"
+    error "recipe $name unknwon"
+      ;;
   esac
 }
 
