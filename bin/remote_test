@@ -7,6 +7,7 @@ require "optparse"
 host = nil
 user = "root"
 ssh_key_path = File.expand_path("~/.ssh/id_rsa.pub")
+proxy = nil
 
 opts = OptionParser.new do |o|
   o.on("-h HOST", "--host", "Remote docker host to be used") do |value|
@@ -19,6 +20,10 @@ opts = OptionParser.new do |o|
 
   o.on("-i SSH_KEY", "--ssh-key", "Path to your public ssh key. default: #{ssh_key_path}") do |value|
     ssh_key_path = File.expand_path(value)
+  end
+
+  o.on("--proxy", "Run curl and apt calls through http proxy") do
+    proxy = "http_proxy=http://172.16.42.1:3128"
   end
 end
 
@@ -76,10 +81,11 @@ begin
   atts = { instance_id: instance_id, port: port }
   puts "running #{atts.inspect}"
 
+
   runner = Anywhere::SSH.new(host, user, port: port)
-  runner.execute("apt-get update && apt-get install curl -y")
+  runner.execute("#{proxy} apt-get update && apt-get install curl -y")
   runner.write_file("/usr/bin/dockyard", File.read(File.expand_path("../../dockyard", __FILE__)), mode: "0755")
-  runner.execute("/usr/bin/dockyard install #{cmd.join(" ")}")
+  runner.execute("#{proxy} /usr/bin/dockyard install #{cmd.join(" ")}")
   puts "installed in container #{atts.inspect}"
 ensure
   root_runner.execute("docker kill #{instance_id}")
