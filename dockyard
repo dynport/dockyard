@@ -20,22 +20,22 @@ function enable_universe {
 }
 
 function download_url {
-  url=$1
+  current_url=$1
   root=$2
 
   if [ "$root" == "" ]; then
     root=/tmp
   fi
 
-  dst="$root/$(basename $url)"
+  dst="$root/$(basename $current_url)"
 
   mkdir -p $(dirname $dst)
 
   if [ ! -e $dst ]; then
-    info "fetching $url to $dst"
-    curl -s -o $dst.tmp $url && mv $dst.tmp $dst
+    info "fetching $current_url to $dst"
+    curl -s -o $dst.tmp $current_url && mv $dst.tmp $dst
   else
-    info "already fetched $url"
+    info "already fetched $current_url"
   fi
 }
 
