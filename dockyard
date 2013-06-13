@@ -41,46 +41,30 @@ function download_url {
 
 function configure {
   assign_variables
-  marker=/tmp/$name.configured
-  if [ ! -e $marker ]; then
-    cd /tmp/$name
-    info "configuring"
-    if [ "$configure_cmd" == "" ]; then
-      ./configure
-    else
-      $configure_cmd
-    fi
-    touch $marker
-    info "configured"
+  info "configuring"
+  cd /tmp/$name
+  if [ "$configure_cmd" == "" ]; then
+    ./configure
   else
-    info "already configured"
+    $configure_cmd
   fi
+  info "configured"
 }
 
 function build {
   assign_variables
-  marker=/tmp/$name.built
-  if [ ! -e $marker ]; then
-    cd /tmp/$name
-    info "building"
-    make
-    touch $marker
-  else
-    info "already built"
-  fi
+  cd /tmp/$name
+  info "building"
+  make
+  info "built"
 }
 
 function install_binaries {
   assign_variables
-  marker=/tmp/$name.installed
-  if [ ! -e $marker ]; then
-    cd /tmp/$name
-    info "installing"
-    make install
-    touch $marker
-  else
-    info "already installed"
-  fi
+  cd /tmp/$name
+  info "installing"
+  make install
+  info "binaries installed"
 }
 
 function assign_variables {
@@ -94,15 +78,10 @@ function assign_variables {
 
 function extract {
   assign_variables
-  marker=/tmp/$file_name.extracted$
-  if [ ! -e $marker ]; then
-    info "extracting"
-    cd /tmp
-    tar xfz $file_name
-    touch $marker
-  else
-    info "already extracted"
-  fi
+  info "extracting"
+  cd /tmp
+  tar xfz $file_name
+  info "extracted"
 }
 
 function setup {
@@ -149,14 +128,8 @@ function apply_nginx_syslog_patch {
   download_url $syslog_config_url /tmp/nginx_syslog_patch
   download_url $syslog_patch_url /tmp/nginx_syslog_patch
 
-  marker=/tmp/nginx_syslog_patch.applied
-  if [ ! -e $marker ]; then
-    cd /tmp/$name
-    patch -p1 < /tmp/nginx_syslog_patch/$(basename $syslog_patch_url)
-    touch $marker
-  else
-    info "already applied nginx syslog patch"
-  fi
+  cd /tmp/$name
+  patch -p1 < /tmp/nginx_syslog_patch/$(basename $syslog_patch_url)
 }
 
 function install_nginx {
