@@ -88,7 +88,7 @@ function setup {
   info "setup"
   enable_universe
   info "install build packages"
-  apt-get install build-essential curl git-core -y
+  apt-get install build-essential curl -y
   info "installed build packages"
 }
 
