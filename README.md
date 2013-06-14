@@ -48,6 +48,7 @@ And then execute with:
 ## Available recipes (with most recent versions)
 
     ruby        # 2.0.0-p195
+    jruby       # 1.7.4
     nginx       # 1.4.1
     redis       # 2.6.13
     postgresql  # 9.2.4
