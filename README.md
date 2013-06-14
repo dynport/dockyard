@@ -48,6 +48,7 @@ And then execute with:
 ## Available recipes (with most recent versions)
 
     ruby        # 2.0.0-p195
+    php         # 5.3.26 - 5.4.16 somehow breaks when compiling
     jruby       # 1.7.4
     nginx       # 1.4.1
     redis       # 2.6.13

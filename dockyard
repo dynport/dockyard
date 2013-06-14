@@ -188,6 +188,18 @@ function install_jruby {
   cp /tmp/jruby-$version/bin/* /usr/local/bin/
 }
 
+function install_php {
+  url=http://de1.php.net/distributions/php-$version.tar.gz
+  required_packages="libxml2-dev libexif-dev libzip-dev libpng-dev libmysqlclient-dev libjpeg-dev libpng-dev libfreetype6-dev file"
+  configure_cmd="./configure --with-zlib --with-mysql --with-mysqli --with-exif --with-gd --with-jpeg-dir --with-png-dir --with-freetype-dir --enable-fpm"
+  download_url $url
+  install_required_packages
+  extract
+  configure
+  build
+  install_binaries
+}
+
 function do_install {
   name=$1
   version=$2
@@ -211,6 +223,9 @@ function do_install {
       ;;
     "redis")
     install_redis $version
+      ;;
+    "php")
+    install_php $version
       ;;
     "*")
     error "recipe $name unknwon"
