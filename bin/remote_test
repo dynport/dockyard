@@ -45,7 +45,7 @@ image_name = "dockyard:sshd"
 
 begin
   root_runner.execute("docker inspect #{image_name}")
-rescue RuntimeError => err
+rescue Anywhere::ExecutionError => err
   if !File.exists?(ssh_key_path)
     puts "ERROR: no ssh key found at #{ssh_key_path}"
     abort opts.to_s
@@ -80,9 +80,19 @@ begin
   port = root_runner.execute("docker port #{instance_id} 22").stdout.strip.to_i
   atts = { instance_id: instance_id, port: port }
   puts "running #{atts.inspect}"
+  
+  runner = nil
+  3.times do |i|
+    begin
+      runner = Anywhere::SSH.new(host, user, port: port)
+      runner.execute("uptime")
+      break
+    rescue => err
+      puts "ERROR: #{err.message}"
+      sleep 2 ** 1
+    end
+  end
 
-
-  runner = Anywhere::SSH.new(host, user, port: port)
   runner.execute("#{proxy} apt-get update && apt-get install curl -y")
   runner.write_file("/usr/bin/dockyard", File.read(File.expand_path("../../dockyard", __FILE__)), mode: "0755")
   runner.execute("#{proxy} /usr/bin/dockyard install #{cmd.join(" ")}")
