@@ -1,6 +1,18 @@
+require "set"
+
 module Dockyard
   module Recipes
     class Base
+      class << self
+        def inherited(clazz)
+          all_names << clazz.name.split("::").last.downcase
+        end
+
+        def all_names
+          @set ||= Set.new
+        end
+      end
+
       def initialize(version = nil)
         @version = version
       end
