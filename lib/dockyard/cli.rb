@@ -11,13 +11,13 @@ module Dockyard
       case action
       when "build"
         begin
-        clazz = eval("Dockyard::Recipes::#{name.capitalize}")
+        clazz = Dockyard::Recipes::Base.all_names[name]
         recipe = clazz.new(version)
         recipe.from(@from) if @from
         recipe.compile
         recipe.to_dockerfile + "\n"
         rescue NameError
-          puts "ERROR: recipe #{name.inspect} unknown. Use one of #{Dockyard::Recipes::Base.all_names.to_a.sort.join(", ")}"
+          puts "ERROR: recipe #{name.inspect} unknown. Use one of #{Dockyard::Recipes::Base.all_names.keys.sort.join(", ")}"
           abort opts.to_s
         end
       else
@@ -42,7 +42,7 @@ module Dockyard
       return @opts if @opts
       require "optparse"
       @opts = OptionParser.new
-      @opts.banner = "Usage: #{File.basename(__FILE__)} <build> <#{Dockyard::Recipes::Base.all_names.to_a.sort.join("|")}> [version]"
+      @opts.banner = "Usage: #{File.basename(__FILE__)} <build> <#{Dockyard::Recipes::Base.all_names.keys.sort.join("|")}> [version]"
       @opts.on("-f FROM", "from to be used as first line of the Dockerfile") do |value|
         @from = value
       end

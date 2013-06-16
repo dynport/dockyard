@@ -5,11 +5,11 @@ module Dockyard
     class Base
       class << self
         def inherited(clazz)
-          all_names << clazz.name.split("::").last.downcase
+          all_names[clazz.name.split("::").last.downcase] = clazz
         end
 
         def all_names
-          @set ||= Set.new
+          @all_names ||= {}
         end
       end
 
