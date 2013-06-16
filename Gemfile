@@ -1,5 +1,4 @@
-# A sample Gemfile
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-gem "anywhere"
-gem "colorize"
+# Specify your gem's dependencies in dockyard.gemspec
+gemspec
