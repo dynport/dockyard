@@ -9,7 +9,7 @@ describe "Recipes spec", :integration do
   end
 
   before do
-    # @ssh.logger.stub(:debug) { }
+    @ssh.logger.stub(:debug) { }
   end
 
   def build_dockerfile(recipe)
