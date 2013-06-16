@@ -66,7 +66,7 @@ module Dockyard
       end
 
       def minor_version
-        @version.split(".")[0,2].join(".")
+        version.split(".")[0,2].join(".")
       end
 
       [:from, :run, :env, :expose, :cmd].each do |name|
@@ -90,6 +90,12 @@ module Dockyard
 
       def to_dockerfile
         lines.join("\n")
+      end
+
+      def compile
+        commands.each do |cmd|
+          run cmd
+        end
       end
 
       def lines 

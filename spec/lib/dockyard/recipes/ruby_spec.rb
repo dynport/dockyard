@@ -6,6 +6,7 @@ describe "Dockyard::Recipes::Ruby" do
   it { should_not be_nil }
 
   it { clazz.new.version.should eq("2.0.0-p195") }
+  it { clazz.new.minor_version.should eq("2.0") }
 
   describe "#instance" do
     subject(:instance) { clazz.new("2.0.0-p195") }

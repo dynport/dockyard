@@ -4,7 +4,7 @@ module Dockyard
   module Recipes
     class Ruby < Base
       def url
-        "http://ftp.ruby-lang.org/pub/ruby/#{minor_version}/ruby-#{@version}.tar.gz"
+        "http://ftp.ruby-lang.org/pub/ruby/#{minor_version}/ruby-#{version}.tar.gz"
       end
 
       def required_packages
