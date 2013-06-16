@@ -14,6 +14,10 @@ module Dockyard
       def required_packages
         %w(libevent-dev)
       end
+
+      def default_version
+        "1.4.15"
+      end
     end
   end
 end

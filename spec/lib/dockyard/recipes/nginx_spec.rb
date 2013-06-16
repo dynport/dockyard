@@ -4,6 +4,8 @@ require "dockyard/recipes/nginx"
 describe "Dockyard::Recipes::Nginx" do
   subject(:clazz) { Dockyard::Recipes::Nginx }
 
+  it { clazz.new.version.should eq("1.4.1") }
+
   describe "#instance" do
     subject(:instance) { clazz.new("1.4.1") }
 

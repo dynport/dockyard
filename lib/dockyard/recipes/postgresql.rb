@@ -3,6 +3,10 @@ require "dockyard/recipes/base"
 module Dockyard
   module Recipes
     class PostgreSQL < Base
+      def default_version
+        "9.2.4"
+      end
+
       def url
         "http://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.gz"
       end

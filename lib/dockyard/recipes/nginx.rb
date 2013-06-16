@@ -11,6 +11,10 @@ module Dockyard
         %w(unzip libpcre3 libpcre3-dev libssl-dev libpcrecpp0 zlib1g-dev libgd2-xpm-dev)
       end
 
+      def default_version
+        "1.4.1"
+      end
+
       def configure_cmd
         [
           download_url_cmd(syslog_config_url, syslog_patch_path + "/config"),

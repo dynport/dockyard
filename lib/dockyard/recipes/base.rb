@@ -1,10 +1,16 @@
 module Dockyard
   module Recipes
     class Base
-      attr_reader :version
-
-      def initialize(version)
+      def initialize(version = nil)
         @version = version
+      end
+
+      def version
+        @version || default_version
+      end
+
+      def default_version
+        raise "implement me"
       end
 
       def to_s

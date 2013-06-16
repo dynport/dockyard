@@ -5,6 +5,8 @@ describe "Dockyard::Recipes::Ruby" do
   subject(:clazz) { Dockyard::Recipes::Ruby }
   it { should_not be_nil }
 
+  it { clazz.new.version.should eq("2.0.0-p195") }
+
   describe "#instance" do
     subject(:instance) { clazz.new("2.0.0-p195") }
 

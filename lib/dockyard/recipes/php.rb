@@ -1,6 +1,10 @@
 module Dockyard
   module Recipes
     class PHP < Base
+      def default_version
+        "5.3.26"
+      end
+
       def url
         "http://de1.php.net/distributions/php-#{version}.tar.gz"
       end

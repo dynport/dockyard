@@ -14,6 +14,10 @@ module Dockyard
       def required_packages
         []
       end
+
+      def default_version
+        "2.6.13"
+      end
     end
   end
 end

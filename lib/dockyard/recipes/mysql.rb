@@ -14,6 +14,10 @@ module Dockyard
       def configure_cmd
         "cd /tmp/#{name} && cmake ."
       end
+
+      def default_version
+        "5.6.11"
+      end
     end
   end
 end

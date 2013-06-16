@@ -14,4 +14,6 @@ describe "Dockyard::Recipes::Riak" do
     it { subject.run_cmd.should include("riak start") }
 
   end
+
+  it { clazz.new.version.should eq("1.2.0") }
 end

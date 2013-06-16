@@ -14,6 +14,10 @@ module Dockyard
       def configure_cmd
         "cd /tmp/#{name} && ./configure --disable-install-doc"
       end
+
+      def default_version
+        "2.0.0-p195"
+      end
     end
   end
 end

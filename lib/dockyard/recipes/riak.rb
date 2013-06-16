@@ -7,6 +7,10 @@ module Dockyard
         "http://downloads.basho.com.s3-website-us-east-1.amazonaws.com/riak/#{minor_version}/#{version}/riak-#{version}.tar.gz"
       end
 
+      def default_version
+        "1.2.0"
+      end
+
       def required_packages
         %w(git-core build-essential curl erlang-nox erlang-reltool)
       end
