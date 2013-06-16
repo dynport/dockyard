@@ -80,7 +80,7 @@ begin
   port = root_runner.execute("docker port #{instance_id} 22").stdout.strip.to_i
   atts = { instance_id: instance_id, port: port }
   puts "running #{atts.inspect}"
-  
+
   runner = nil
   3.times do |i|
     begin
