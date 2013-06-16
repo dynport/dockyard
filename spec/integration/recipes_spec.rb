@@ -40,7 +40,7 @@ describe "Recipes spec", :integration do
 
   it "should install postgresql" do
     require "dockyard/recipes/postgresql"
-    recipe = Dockyard::Recipes::PostgreSQL.new("9.2.4")
+    recipe = Dockyard::Recipes::Postgresql.new("9.2.4")
     @ssh.execute("docker build -t dockyard:postgresql -", build_dockerfile(recipe))
   end
 
@@ -58,7 +58,7 @@ describe "Recipes spec", :integration do
 
   it "should install mysql" do
     require "dockyard/recipes/mysql"
-    recipe = Dockyard::Recipes::MySQL.new("5.6.11")
+    recipe = Dockyard::Recipes::Mysql.new("5.6.11")
     @ssh.execute("docker build -t dockyard:mysql -", build_dockerfile(recipe))
   end
 

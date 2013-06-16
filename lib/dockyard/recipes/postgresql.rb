@@ -2,7 +2,7 @@ require "dockyard/recipes/base"
 
 module Dockyard
   module Recipes
-    class PostgreSQL < Base
+    class Postgresql < Base
       def default_version
         "9.2.4"
       end

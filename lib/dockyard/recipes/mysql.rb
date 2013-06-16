@@ -2,7 +2,7 @@ require "dockyard/recipes/base"
 
 module Dockyard
   module Recipes
-    class MySQL < Base
+    class Mysql < Base
       def url
         "http://cdn.mysql.com/Downloads/MySQL-#{minor_version}/mysql-#{version}.tar.gz"
       end
