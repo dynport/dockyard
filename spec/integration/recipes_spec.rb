@@ -4,12 +4,14 @@ $:.push(File.expand_path("../../../lib", __FILE__))
 
 describe "Recipes spec", :integration do
   before(:all) do
-    host = "docker.test"
-    @ssh = Anywhere::SSH.new(host, "root")
+    host = ENV["DOCKYARD_TEST_HOST"]
+    raise "DOCKYARD_TEST_HOST must be set" if host.nil?
+    user = ENV["DOCKYARD_TEST_USER"] || "vagrant"
+    @ssh = Anywhere::SSH.new(host, user)
   end
 
   before do
-    @ssh.logger.stub(:debug) { }
+    # @ssh.logger.stub(:debug) { }
   end
 
   def build_dockerfile(recipe)
@@ -20,13 +22,13 @@ describe "Recipes spec", :integration do
     lines.join("\n") + "\n"
   end
 
-  it "should install nginx" do
+  it "should install nginx", :wip do
     require "dockyard/recipes/nginx"
     recipe = Dockyard::Recipes::Nginx.new("1.4.1")
     @ssh.execute("docker build -t dockyard:nginx -", build_dockerfile(recipe))
   end
 
-  it "should install redis" do
+  it "should install redis", :wip do
     require "dockyard/recipes/redis"
     recipe = Dockyard::Recipes::Redis.new("2.6.13")
     @ssh.execute("docker build -t dockyard:redis -", build_dockerfile(recipe))
