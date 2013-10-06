@@ -162,7 +162,7 @@ function apply_nginx_syslog_patch {
 function install_nginx {
   url="http://nginx.org/download/nginx-$version.tar.gz"
   required_packages="unzip libpcre3 libpcre3-dev libssl-dev libpcrecpp0 zlib1g-dev libgd2-xpm-dev"
-  configure_cmd="./configure --with-http_ssl_module --with-http_spdy_module --with-http_gzip_static_module --with-http_stub_status_module --add-module=/tmp/nginx_syslog_patch"
+  configure_cmd="./configure --with-http_ssl_module --with-http_spdy_module --with-http_gzip_static_module --with-http_stub_status_module"
   download_url $url
   install_required_packages
   extract
