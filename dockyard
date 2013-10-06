@@ -187,7 +187,7 @@ function install_ruby {
 }
 
 function install_redis {
-  url=http://redis.googlecode.com/files/redis-$version.tar.gz
+  url=http://download.redis.io/releases/redis-$version.tar.gz
   download_url $url
   extract
   build
