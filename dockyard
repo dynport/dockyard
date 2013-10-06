@@ -166,7 +166,7 @@ function install_nginx {
   download_url $url
   install_required_packages
   extract
-  apply_nginx_syslog_patch
+  # apply_nginx_syslog_patch
   configure
   build
   install_binaries
